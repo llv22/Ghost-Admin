@@ -34,6 +34,15 @@
     {{content-for "minifiedInProductionCss"}}
 
     {{content-for "head-footer"}}
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+    <!--- not working, need to double check for local on nginx and node -->
+    <!--- <script type="text/javascript" async src="{{asset "js/MathJax-2.7.2/MathJax.js"}}?config=TeX-AMS_CHTML"></script> -->
+
 </head>
 <body>
 
