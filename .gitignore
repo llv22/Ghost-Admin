@@ -49,3 +49,4 @@ Session.vim
 /coverage/*
 /libpeerconnection.log
 testem.log
+package-lock.json

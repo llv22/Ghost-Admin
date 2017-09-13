@@ -35,16 +35,65 @@
 
     {{content-for "head-footer"}}
 
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js" integrity="sha256-7LkWEzqTdpEfELxcZZlS6wAx5Ff13zZ83lYO2/ujj7g=" crossorigin="anonymous"></script>  
+    <!-- load mathjax from remote link 2.7.2 -->
     <script type="text/x-mathjax-config">
-        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+        MathJax.Hub.Config({
+          tex2jax: {
+            inlineMath: [['$','$'], ['\\(','\\)']],
+            processEscapes: true
+          },
+          TeX: { equationNumbers: { autoNumber: "AMS" } }
+        });
     </script>
-    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
-    </script>
-    <!--- not working, need to double check for local on nginx and node -->
-    <!--- <script type="text/javascript" async src="{{asset "js/MathJax-2.7.2/MathJax.js"}}?config=TeX-AMS_CHTML"></script> -->
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 
 </head>
 <body>
+
+<script type="text/javascript">
+    // TODO : loading scripting https://gist.github.com/mauriciopoppe/2f40ceee20841ffe782f
+    (function () {
+        var timeout;
+        function mathjaxify() {
+        var entry = document.getElementsByClassName('CodeMirror-code')[0];
+        if (entry) {
+            var preview = document.getElementsByClassName('gh-markdown-editor-preview-content')[0];
+            if (typeof(typeset) == "undefined" || typeset == true) {
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub, preview]);  // renders mathjax if 'typeset' is true (or undefined)
+            typesetStubbornMath();
+            }
+            // Render the bits of math that have inexplicably still failed to render, while
+            // leaving the rest alone. (If you try to typeset the whole page, it will break
+            // other things)
+            function typesetStubbornMath() {
+            $(".MathJax_Preview").each(function () {
+                if ($(this).text() != "") {
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub, $(this).attr("id")]);
+                }
+            });
+            }
+        }
+        }
+    
+        jQuery(document).keypress(function () {
+        clearTimeout(timeout);
+        timeout = setTimeout(mathjaxify, 500);
+        });
+        jQuery(".CodeMirror-code").ready(function () {
+        clearTimeout(timeout);
+        setTimeout(function(){
+            // set : change keyup paste hook
+            jQuery(".CodeMirror-code").on('DOMNodeInserted DOMNodeRemoved', function () {
+                clearTimeout(timeout);
+                timeout = setTimeout(mathjaxify, 500);
+            });
+        }, 2500);
+        timeout = setTimeout(mathjaxify, 2500);
+        });
+    
+    })();
+    </script>
 
 <div class="ember-load-indicator">
     <div class="gh-loading-content">
