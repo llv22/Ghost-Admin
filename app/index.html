@@ -83,8 +83,8 @@
         jQuery(".CodeMirror-code").ready(function () {
         clearTimeout(timeout);
         setTimeout(function(){
-            // set : change keyup paste hook
-            jQuery(".CodeMirror-code").on('DOMNodeInserted DOMNodeRemoved', function () {
+            // set : change keyup paste hook, aslo in https://stackoverflow.com/questions/31000425/jquery-detect-change-in-the-content-of-a-span-field
+            jQuery(".CodeMirror-code").on('DOMNodeInserted DOMNodeRemoved DOMSubtreeModified', function () {
                 clearTimeout(timeout);
                 timeout = setTimeout(mathjaxify, 500);
             });
